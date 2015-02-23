@@ -1,0 +1,18 @@
+[{
+    text: 'Menu', 
+    cls: 'feeds-node',
+    expanded:true,
+    children: [{
+        text: 'Data Chart',
+        id : 'chart',
+        leaf: true
+    },{
+        text: 'GeoMap Chart',
+        id : 'geomap',
+        leaf: true
+    },{
+        text: 'Google Map & Kiva',
+        id : 'gmap',
+        leaf: true
+    }]
+}]

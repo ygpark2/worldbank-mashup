@@ -1,0 +1,136 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title id='title'>HTML Page setup Tutorial</title>
+ 
+        <!-- ** CSS ** -->
+        <link rel="stylesheet" type="text/css" href="../lib/ext-3.3.1/resources/css/ext-all.css" />
+
+        <script type="text/javascript" src="http://www.google.com/jsapi"></script> 
+        <!-- this is for the local host -->
+ 
+        <!-- base library -->
+        <script type="text/javascript" src="../lib/ext-3.3.1/adapter/ext/ext-base.js"></script>
+
+        <!-- overrides to base library -->
+         <script type="text/javascript" src="./js/Variables.js"></script>
+        <!-- ** Javascript ** -->
+        <!-- ExtJS library: base/adapter -->
+
+        <!-- ExtJS library: all widgets -->
+        <script type="text/javascript" src="../lib/ext-3.3.1/ext-all-debug.js"></script>
+        <!-- overrides to base library -->
+        <script type="text/javascript" src="./js/ux/jsonp.js"></script>
+        <script type="text/javascript" src="./js/ux/WorldBank.js"></script>
+        <script type="text/javascript" src="./js/ux/WorldBankComponent.js"></script>
+        <script type="text/javascript" src="./js/ux/GVisualizationPanel.js"></script>
+        <script type="text/javascript" src="./js/ux/RemoteComponent.js"></script>
+ 
+        <!-- page specific -->
+ 
+        <script type="text/javascript">
+        // Path to the blank image should point to a valid location on your server
+        Ext.BLANK_IMAGE_URL = '/worldbank/lib/ext-3.3.1/resources/images/default/s.gif';
+        var updateResults = function(data) {
+            Ext.fly('resultset').update('');
+            Ext.each(data.items, function() {
+                console.log(this);
+            });
+        }
+        
+        Ext.ux.JSONP.request(worldbank_api_url + '/countries/CUB;CRI/indicators/SP.POP.TOTL?format=json', {
+            callbackKey: 'Getdata',
+            params: {
+                format: 'json',
+                // tags: Ext.fly('search-value').dom.value,
+                // tagmode: 'all',
+                lang: 'en-us'                            
+            },
+            callback: updateResults
+        });
+
+        new Ext.data.Store ( {
+            url: './json/SP.POP.TOTL',
+    		// url: '/lib/ajax-proxy.php?route=/countries/CUB;CRI/indicators/SP.POP.TOTL?format=json',
+            autoLoad: true,
+    	    reader: new Ext.ux.data.wbReader({
+    	        root: 'results',
+    	        fields: [{name: 'date', mapping: 'date'},
+    	                 {name: 'value', mapping: 'value'}
+    	        ]
+    	    }),
+    	    listeners: {
+	            load: function(t, records, options) {
+        			alert(t);
+	            }   
+	        } 
+    	});
+
+        var panel = new Ext.Panel({
+            id:'main-panel',
+            baseCls:'x-plain',
+            renderTo: Ext.getBody(),
+            layout:'table',
+            layoutConfig: {columns:3},
+            // applied to child components
+            defaults: {bodyStyle:'padding:20px'},
+            items:[{
+                title:'Item 1'
+            },{
+                title:'Item 2'
+            },{
+                title:'Item 3'
+            },{
+                title:'Item 4',
+                // width:410,
+                colspan:2
+            },{
+                title:'Item 5'
+            },{
+                title:'Item 6'
+            },{
+                title:'Item 7',
+                // width:410,
+                colspan:2
+            },{
+                title:'Item 8'
+            }]
+        });
+
+        </script>
+ 
+    </head>
+    <body>
+
+    <div id="header">
+        <div id="languages"></div>
+        <!-- <div style="float:right;margin:5px;" class="x-small-editor"><input type="text" id="search" /></div> -->
+    </div>
+
+    <!-- use class="x-hide-display" to prevent a brief flicker of the content -->
+    <div id="west" class="x-hide-display">
+        <p>Hi. I'm the west panel.</p>
+    </div>
+
+    <div id="center2" class="x-hide-display">
+        <a id="hideit" href="#">Toggle the west region</a>
+        <p>The center panel automatically grows to fit the remaining space in the container that isn't taken up by the border regions.</p>
+        <hr>
+    </div>
+    <div id="center1" class="x-hide-display">
+        <p><b>Done reading me? Close me by clicking the X in the top right corner.</b></p>
+    </div>
+
+    <div id="props-panel" class="x-hide-display" style="width:200px;height:200px;overflow:hidden;">
+    </div>
+
+    <div id="south" class="x-hide-display">
+        <p>south - generally for informational stuff, also could be for status bar</p>
+    </div>
+
+    <div id="footer">
+        <div id=""></div>
+    </div>
+
+    </body>
+</html>
